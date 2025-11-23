@@ -1,0 +1,233 @@
+PROGRAM:ELECCONF
+ClrHome
+Disp "ELEC CONFIG v1"
+Lbl M
+0→K
+Menu("CHOOSE", "BY ATOMIC #",A,"BY SYMBOL",B,"QUIT",Q)
+Lbl A
+0→Z
+While Z<1 or Z>118
+Input "ATOMIC #?",Z
+If Z<1 or Z>118
+Then
+ClrHome
+Disp "INVALID NUMBER"
+End
+End
+Goto F
+Lbl B
+""→Str9
+"abcdefghijklmnopqrstuvwxyz"→Str2
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"→Str3
+"H*HeLiBeB*C*N*O*F*NeNaMgAlSiP*S*ClArK*CaScTiV*CrMnFeCoNiCuZnGaGeAsSeBrKrRbSrY*ZrNbMoTcRuRhPdAgCdInSnSbTeI*XeCsBaLaCePrNdPmSmEuGdTbDyHoErTmYbLuHfTaW*ReOsIrPtAuHgTlPbBiPoAtRnFrRaAcThPaU*NpPuAmCmBkCfEsFmMdNoLrRfDbSgBhHsMtDsRgCnNhFlMcLvTsOg"→Str1
+0→Z
+While Z=0
+Input "SYMBOL?",Str9
+If length(Str9)=1
+Then
+Str9+"*"→Str9
+Else
+If length(Str9)=2
+Then
+Str9
+Else
+""→Str9
+End
+End
+If Str9=""
+Then
+ClrHome
+Disp "UNKNOWN SYMBOL"
+Else
+For(I,1,length(Str9))
+sub(Str9,I,1)→Str0
+inString(Str2,Str0)→K
+If K
+Then
+left(Str9,I-1)+sub(Str3,K,1)+sub(Str9,I+1,99)→Str9
+End
+End
+For(I,1,118)
+If sub(Str1,2I-1,2)=Str9
+Then
+I→Z
+I→K
+End
+End
+If Z=0
+Then
+ClrHome
+Disp "UNKNOWN SYMBOL"
+End
+End
+End
+If Z=0
+Goto B
+sub(Str1,2K-1,2)→StrS
+Goto F
+Lbl F
+{1,2,2,3,3,4,3,4,5,4,5,6,4,5,6,7,5,6,7}→L1
+{2,2,6,2,6,2,10,6,2,10,6,2,14,10,6,2,14,10,6}→L2
+"sspspsdpsdpsfdpsfdp"→Str4
+0→S
+DelVar L3
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}→L3
+For(I,1,19)
+min(L2(I),Z-S)→L3(I)
+S+L3(I)→S
+If S=Z
+Then
+I→Last
+Goto E
+End
+End
+Lbl E
+If Z=24 or Z=29
+Then
+If L3(6) and L3(7)
+Then
+L3(6)-1→L3(6)
+L3(7)+1→L3(7)
+End
+End
+If Z=42 or Z=41
+Then
+If L3(9) and L3(10)
+Then
+L3(9)-1→L3(9)
+L3(10)+1→L3(10)
+End
+End
+If Z=47
+Then
+If L3(9) and L3(10)
+Then
+L3(9)-1→L3(9)
+L3(10)+1→L3(10)
+End
+End
+If Z=79
+Then
+If L3(12) and L3(14)
+Then
+L3(12)-1→L3(12)
+L3(14)+1→L3(14)
+End
+End
+If K=0
+Then
+sub(Str1,2Z-1,2)→StrS
+End
+ClrHome
+Output(1,1,StrS)
+Output(1,length(StrS)+2,"(")
+Output(1,length(StrS)+3,Z)
+Output(1,length(StrS)+4+int(log(Z)),")")
+Disp "FULL:"
+""→Str8
+For(I,1,19)
+If L3(I)
+Then
+ If L3(I)<10
+ Then
+ sub("0123456789",L3(I)+1,1)→StrE
+ Else
+ "1"+sub("0123456789",L3(I)-9,1)→StrE
+ End
+ sub("1234567",L1(I),1)+sub(Str4,I,1)+StrE+" "→Str9
+If length(Str8)+length(Str9)>15
+Then
+Disp Str8
+""→Str8
+End
+Str8+Str9→Str8
+End
+End
+If length(Str8)>0
+Disp Str8
+Pause
+0→Core
+""→StrC
+If Z≥87
+Then
+86→Core
+"[Rn] "→StrC
+16→Start
+Else
+If Z≥55
+Then
+54→Core
+"[Xe] "→StrC
+12→Start
+Else
+If Z≥37
+Then
+36→Core
+"[Kr] "→StrC
+9→Start
+Else
+If Z≥19
+Then
+18→Core
+"[Ar] "→StrC
+6→Start
+Else
+If Z≥11
+Then
+10→Core
+"[Ne] "→StrC
+4→Start
+Else
+If Z≥3
+Then
+2→Core
+"[He] "→StrC
+2→Start
+Else
+0→Core
+""→StrC
+1→Start
+End
+End
+End
+End
+End
+End
+ClrHome
+Output(1,1,StrS)
+Output(1,length(StrS)+2,"(")
+Output(1,length(StrS)+3,Z)
+Output(1,length(StrS)+4+int(log(Z)),")")
+Disp "CONDENSED:"
+If Z=Core
+Then
+Disp StrC
+Else
+StrC→Str8
+For(I,Start,19)
+If L3(I)
+Then
+ If L3(I)<10
+ Then
+ sub("0123456789",L3(I)+1,1)→StrE
+ Else
+ "1"+sub("0123456789",L3(I)-9,1)→StrE
+ End
+ sub("1234567",L1(I),1)+sub(Str4,I,1)+StrE+" "→Str9
+If length(Str8)+length(Str9)>15
+Then
+Disp Str8
+""→Str8
+End
+Str8+Str9→Str8
+End
+End
+If length(Str8)>0
+Disp Str8
+End
+Pause
+Lbl R
+Menu("NEXT?","NEW ELEMENT",M,"QUIT",Q)
+Lbl Q
+ClrHome
+Stop
